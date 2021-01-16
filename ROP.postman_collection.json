@@ -1,0 +1,354 @@
+{
+	"info": {
+		"_postman_id": "fcab5d5b-e01b-4d25-914b-eaab82f34e78",
+		"name": "ROP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create People OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var response = JSON.parse(responseBody);\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"var request = JSON.parse(request.data);\r",
+							"postman.setGlobalVariable(\"rop_id\"               , request.id);\r",
+							"postman.setGlobalVariable(\"rop_name\"             , request.name);\r",
+							"postman.setGlobalVariable(\"rop_cpf\"              , request.cpf);\r",
+							"postman.setGlobalVariable(\"rop_dateOfBirth\"      , request.dateOfBirth);\r",
+							"\r",
+							"postman.setGlobalVariable(\"rop_contacts1.id\"     , request.contacts[0].id);\r",
+							"postman.setGlobalVariable(\"rop_contacts1.name\"   , request.contacts[0].name);\r",
+							"postman.setGlobalVariable(\"rop_contacts1.phone\"  , request.contacts[0].phone);\r",
+							"postman.setGlobalVariable(\"rop_contacts1.email\"  , request.contacts[0].email);\r",
+							"\r",
+							"postman.setGlobalVariable(\"rop_contacts2.id\"     , request.contacts[1].id);\r",
+							"postman.setGlobalVariable(\"rop_contacts2.name\"   , request.contacts[1].name);\r",
+							"postman.setGlobalVariable(\"rop_contacts2.phone\"  , request.contacts[1].phone);\r",
+							"postman.setGlobalVariable(\"rop_contacts2.email\"  , request.contacts[1].email);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"Renata Eloá da Mota\",\r\n    \"cpf\": \"97502229620\",\r\n    \"dateOfBirth\": \"12/07/1996\",\r\n    \"contacts\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"Ryan Levi Dias\",\r\n            \"phone\": \"42004949813\",\r\n            \"email\": \"ryanlevidias@adiretoria.com.br\"\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"name\": \"Anderson César Bruno da Cunha\",\r\n            \"phone\": \"66119624252\",\r\n            \"email\": \"andersoncesarbrunodacunha@etep.edu.br\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/people",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"people"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get People OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Checking response body\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.id).to.equal(JSON.parse(pm.globals.get(\"rop_id\")));\r",
+							"    pm.expect(jsonData.name).is.to.equal(pm.globals.get(\"rop_name\"));\r",
+							"    pm.expect(jsonData.cpf).is.to.equal(pm.globals.get(\"rop_cpf\"));\r",
+							"    pm.expect(jsonData.dateOfBirth).is.to.equal(pm.globals.get(\"rop_dateOfBirth\"));\r",
+							"\r",
+							"\r",
+							"    pm.expect(jsonData.contacts[0].id).is.to.equal(JSON.parse(pm.globals.get(\"rop_contacts1.id\")));\r",
+							"    pm.expect(jsonData.contacts[0].name).is.to.equal(pm.globals.get(\"rop_contacts1.name\"));\r",
+							"    pm.expect(jsonData.contacts[0].phone).is.to.equal(pm.globals.get(\"rop_contacts1.phone\"));\r",
+							"    pm.expect(jsonData.contacts[0].email).is.to.equal(pm.globals.get(\"rop_contacts1.email\"));\r",
+							"\t\r",
+							"    pm.expect(jsonData.contacts[1].id).is.to.equal(JSON.parse(pm.globals.get(\"rop_contacts2.id\")));\r",
+							"    pm.expect(jsonData.contacts[1].name).is.to.equal(pm.globals.get(\"rop_contacts2.name\"));\r",
+							"    pm.expect(jsonData.contacts[1].phone).is.to.equal(pm.globals.get(\"rop_contacts2.phone\"));\r",
+							"    pm.expect(jsonData.contacts[1].email).is.to.equal(pm.globals.get(\"rop_contacts2.email\"));\r",
+							"    \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/people/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"people",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get People Filter",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Checking response body\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.content[0].id).to.equal(JSON.parse(pm.globals.get(\"rop_id\")));\r",
+							"    pm.expect(jsonData.content[0].name).is.to.equal(pm.globals.get(\"rop_name\"));\r",
+							"    pm.expect(jsonData.content[0].cpf).is.to.equal(pm.globals.get(\"rop_cpf\"));\r",
+							"    pm.expect(jsonData.content[0].dateOfBirth).is.to.equal(pm.globals.get(\"rop_dateOfBirth\"));\r",
+							"\r",
+							"\r",
+							"    pm.expect(jsonData.content[0].contacts[0].id).is.to.equal(JSON.parse(pm.globals.get(\"rop_contacts1.id\")));\r",
+							"    pm.expect(jsonData.content[0].contacts[0].name).is.to.equal(pm.globals.get(\"rop_contacts1.name\"));\r",
+							"    pm.expect(jsonData.content[0].contacts[0].phone).is.to.equal(pm.globals.get(\"rop_contacts1.phone\"));\r",
+							"    pm.expect(jsonData.content[0].contacts[0].email).is.to.equal(pm.globals.get(\"rop_contacts1.email\"));\r",
+							"\t\r",
+							"    pm.expect(jsonData.content[0].contacts[1].id).is.to.equal(JSON.parse(pm.globals.get(\"rop_contacts2.id\")));\r",
+							"    pm.expect(jsonData.content[0].contacts[1].name).is.to.equal(pm.globals.get(\"rop_contacts2.name\"));\r",
+							"    pm.expect(jsonData.content[0].contacts[1].phone).is.to.equal(pm.globals.get(\"rop_contacts2.phone\"));\r",
+							"    pm.expect(jsonData.content[0].contacts[1].email).is.to.equal(pm.globals.get(\"rop_contacts2.email\"));\r",
+							"    \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/people?search=renata",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"people"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "renata"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update People OK",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var response = JSON.parse(responseBody);\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"var request = JSON.parse(request.data);\r",
+							"postman.setGlobalVariable(\"rop_id\"               , request.id);\r",
+							"postman.setGlobalVariable(\"rop_name\"             , request.name);\r",
+							"postman.setGlobalVariable(\"rop_cpf\"              , request.cpf);\r",
+							"postman.setGlobalVariable(\"rop_dateOfBirth\"      , request.dateOfBirth);\r",
+							"\r",
+							"postman.setGlobalVariable(\"rop_contacts1.id\"     , request.contacts[0].id);\r",
+							"postman.setGlobalVariable(\"rop_contacts1.name\"   , request.contacts[0].name);\r",
+							"postman.setGlobalVariable(\"rop_contacts1.phone\"  , request.contacts[0].phone);\r",
+							"postman.setGlobalVariable(\"rop_contacts1.email\"  , request.contacts[0].email);\r",
+							"\r",
+							"postman.setGlobalVariable(\"rop_contacts2.id\"     , request.contacts[1].id);\r",
+							"postman.setGlobalVariable(\"rop_contacts2.name\"   , request.contacts[1].name);\r",
+							"postman.setGlobalVariable(\"rop_contacts2.phone\"  , request.contacts[1].phone);\r",
+							"postman.setGlobalVariable(\"rop_contacts2.email\"  , request.contacts[1].email);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"Renata Eloá da Mota Alterada\",\r\n    \"cpf\": \"97502229620\",\r\n    \"dateOfBirth\": \"12/07/1996\",\r\n    \"contacts\": [\r\n        {\r\n            \"id\": 1,\r\n            \"name\": \"Ryan Levi Dias Alterado\",\r\n            \"phone\": \"42004949813\",\r\n            \"email\": \"ryanlevidias@adiretoria.com.br\"\r\n        },\r\n        {\r\n            \"id\": 2,\r\n            \"name\": \"Anderson César Bruno da Cunha\",\r\n            \"phone\": \"66119624252\",\r\n            \"email\": \"andersoncesarbrunodacunha@etep.edu.br\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/people/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"people",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Validate Update",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Checking response body\", function () {\r",
+							"\r",
+							"    pm.expect(jsonData.id).to.equal(JSON.parse(pm.globals.get(\"rop_id\")));\r",
+							"    pm.expect(jsonData.name).is.to.equal(pm.globals.get(\"rop_name\"));\r",
+							"    pm.expect(jsonData.cpf).is.to.equal(pm.globals.get(\"rop_cpf\"));\r",
+							"    pm.expect(jsonData.dateOfBirth).is.to.equal(pm.globals.get(\"rop_dateOfBirth\"));\r",
+							"\r",
+							"\r",
+							"    pm.expect(jsonData.contacts[0].id).is.to.equal(JSON.parse(pm.globals.get(\"rop_contacts1.id\")));\r",
+							"    pm.expect(jsonData.contacts[0].name).is.to.equal(pm.globals.get(\"rop_contacts1.name\"));\r",
+							"    pm.expect(jsonData.contacts[0].phone).is.to.equal(pm.globals.get(\"rop_contacts1.phone\"));\r",
+							"    pm.expect(jsonData.contacts[0].email).is.to.equal(pm.globals.get(\"rop_contacts1.email\"));\r",
+							"\t\r",
+							"    pm.expect(jsonData.contacts[1].id).is.to.equal(JSON.parse(pm.globals.get(\"rop_contacts2.id\")));\r",
+							"    pm.expect(jsonData.contacts[1].name).is.to.equal(pm.globals.get(\"rop_contacts2.name\"));\r",
+							"    pm.expect(jsonData.contacts[1].phone).is.to.equal(pm.globals.get(\"rop_contacts2.phone\"));\r",
+							"    pm.expect(jsonData.contacts[1].email).is.to.equal(pm.globals.get(\"rop_contacts2.email\"));\r",
+							"    \r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/people/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"people",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete People OK",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/people/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"people",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Validate Delete",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var response = JSON.parse(responseBody);\r",
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/people/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"people",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

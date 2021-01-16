@@ -1,0 +1,61 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+   http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+   <property name="autoIncrement" value="true"/>
+
+   <changeSet author="JuanPetrik" id="rop1">
+       <comment>Criação da tabela de Pessoas</comment>
+       <createTable tableName="people">
+           <column name="id" type="bigint" autoIncrement="${autoIncrement}">
+               <constraints primaryKey="true" primaryKeyName="pk_people_id" nullable="false"/>
+           </column>
+
+           <column name="name" type="varchar(255)">
+               <constraints nullable="false" />
+           </column>
+
+           <column name="cpf" type="varchar(15)">
+               <constraints nullable="false" />
+           </column>
+
+           <column name="date_of_birth" type="date">
+               <constraints nullable="false" />
+           </column>
+       </createTable>
+
+       <comment>Criação da tabela de Contatos</comment>
+       <createTable tableName="contact">
+           <column name="id" type="bigint" autoIncrement="${autoIncrement}">
+               <constraints primaryKey="true" primaryKeyName="pk_contact_id" nullable="false"/>
+           </column>
+
+           <column name="people_id" type="bigint">
+               <constraints nullable="false" />
+           </column>
+
+           <column name="name" type="VARCHAR(255)">
+               <constraints nullable="false" />
+           </column>
+
+           <column name="phone" type="VARCHAR(20)">
+               <constraints nullable="false" />
+           </column>
+
+           <column name="email" type="VARCHAR(255)">
+               <constraints nullable="false" />
+            </column>
+       </createTable>
+
+       <comment>Criação da Foreign Key</comment>
+       <addForeignKeyConstraint constraintName="fk_contact"
+                                baseTableName="contact" baseColumnNames="people_id"
+                                referencedTableName="people" referencedColumnNames="id"/>
+   </changeSet>
+
+</databaseChangeLog>
