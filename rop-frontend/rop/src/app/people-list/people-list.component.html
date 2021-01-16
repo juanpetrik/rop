@@ -1,0 +1,27 @@
+<div class="card my-5">
+  <div class="card-body">
+    <table class="table table-bordered table-striped">
+      <thead class="thead-dark">
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Nome</th>
+        <th scope="col">CPF</th>
+        <th scope="col">Data de Nascimento</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let people of peoples | paginate: config">
+        <td>{{ people?.id }}</td>
+        <td>{{ people?.name }}</td>
+        <td>{{ people?.cpf }}</td>
+        <td>{{ people?.dateOfBirth }}</td>
+      </tr>
+      </tbody>
+    </table>
+
+    <br/>
+    <div class="text-right">
+      <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>
+    </div>
+  </div>
+</div>

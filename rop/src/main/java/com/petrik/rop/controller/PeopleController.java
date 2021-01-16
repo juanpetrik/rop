@@ -16,6 +16,7 @@ import java.text.ParseException;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class PeopleController {
 
     private final PeopleService peopleService;

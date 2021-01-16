@@ -25,7 +25,7 @@ public class PeopleDTO implements Serializable {
     @CPF
     private String cpf;
 
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     private LocalDate dateOfBirth;
 
     @Valid
